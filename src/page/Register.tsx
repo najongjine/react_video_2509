@@ -26,6 +26,22 @@ export default function Register() {
 
   async function onRegister() {
     /* 회원가입 기능 넣기 */
+    const formData = new FormData();
+    formData.append("username", String(username));
+    formData.append("password", String(password));
+    const response = await fetch(`${API_BASE_URL}/api/user/register`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        Authorization: "",
+      },
+    });
+    let result: any = await response.json(); // 서버 응답을 JSON으로 파싱
+    if (!result?.success) {
+      alert(`로그인 실패. ${result?.msg}`);
+      return;
+    }
+
     let userInfo = result?.data?.userInfo ?? "";
     let token = result?.data?.token ?? "";
     if (!userInfo?.id || !token) {
@@ -63,7 +79,7 @@ export default function Register() {
           }}
         />
         <div>
-          <button onClick={}>회원가입</button>
+          <button onClick={onRegister}>회원가입</button>
         </div>
       </div>
     </div>
