@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import VideoUploaderCompo from "../component/VideoUploaderCompo";
 
-export default function Video() {
+export default function VideoUpload() {
   return (
     <div>
       <div>
