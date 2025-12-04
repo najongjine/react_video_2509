@@ -28,9 +28,7 @@ export default function Header() {
           {userInfo?.id ? (
             // 로그인 상태일 때
             <>
-              <span className="user-info">
-                {userInfo?.displayName ?? ""}님 환영합니다
-              </span>
+              <span className="user-info">{userInfo?.id}님 환영합니다</span>
               <button
                 className="auth-button"
                 onClick={() => {
