@@ -1,10 +1,13 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const VideoUploaderCompo: React.FC = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   // 1. 파일 선택 핸들러
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,21 +39,27 @@ const VideoUploaderCompo: React.FC = () => {
 
     // FormData 생성 (핵심)
     const formData = new FormData();
-    formData.append("video", file); // 'video'는 백엔드에서 받는 key값과 일치해야 함
+    formData.append("videoFile", file); // 'video'는 백엔드에서 받는 key값과 일치해야 함
 
     try {
-      // 실제 API 호출 예시 (fetch 사용)
-      // const response = await fetch('YOUR_API_ENDPOINT/upload', {
-      //   method: 'POST',
-      //   body: formData,
-      //   // 주의: Content-Type 헤더를 직접 설정하지 마세요. 브라우저가 자동으로 boundary를 설정합니다.
-      // });
+      const response = await fetch(`${API_BASE_URL}/api/video/upload_video`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${userInfo?.token ?? ""}`,
+        },
+        body: formData,
+        // 주의: Content-Type 헤더를 직접 설정하지 마세요. 브라우저가 자동으로 boundary를 설정합니다.
+      });
 
-      // 시뮬레이션을 위한 타임아웃 (실제 코드에서는 제거하세요)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const result: any = await response.json();
+      if (!result?.success) {
+        alert(`서버 에러 ${result?.msg ?? ""}`);
+        return `서버 에러 ${result?.msg ?? ""}`;
+      }
 
       console.log("업로드 성공:", file.name);
       alert("업로드 성공!");
+      navigate("/");
     } catch (error) {
       console.error("업로드 실패:", error);
       alert("업로드 중 오류가 발생했습니다.");
