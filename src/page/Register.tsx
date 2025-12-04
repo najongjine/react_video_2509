@@ -62,6 +62,7 @@ export default function Register() {
       <div>
         <input
           value={username}
+          placeholder="username"
           onChange={(event) => {
             let input_value = event?.target?.value ?? "";
             // 숫자와 +, -, *, /, % 만 허용하는 정규식
@@ -71,6 +72,7 @@ export default function Register() {
         />
         <input
           value={password}
+          placeholder="password"
           onChange={(event) => {
             let input_value = event?.target?.value ?? "";
             // 숫자와 +, -, *, /, % 만 허용하는 정규식

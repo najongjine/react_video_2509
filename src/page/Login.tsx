@@ -1,44 +1,88 @@
 import { useEffect, useState } from "react";
+import { useAuthStore } from "../store/authStore";
+import { useShallow } from "zustand/shallow";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  /* inputVal 이라는 바인딩 변수랑 set 함수 만들어 주세요.
-  타입은 string */
-  const [inputVal, setinputVal] = useState<string>("");
-  const [evalResult, setevalResult] = useState<string>("");
-  let dummy = "hello";
-  useEffect(() => {
-    dummy = "bye";
-  }, []);
+  // 1. 상태 읽기 (READ)
+  // useAuthStore 훅을 통해 현재 상태에서 userInfo를 가져옵니다.
+  // 이 방법은 상태가 바뀔 때만 리렌더링됩니다.
+  const userInfo = useAuthStore((state: any) => state.userInfo);
 
-  function onInputEnter(event: React.KeyboardEvent) {
-    let key = event?.key;
-    if (key == "Enter") {
-      const hasOtherCharacters = /[^0-9+\-*/%]/.test(inputVal);
+  // 2. 액션 함수 가져오기 (SET을 위한 함수)
+  const { login, logout } = useAuthStore(
+    useShallow((state: any) => ({
+      login: state?.login,
+      logout: state?.logout,
+    }))
+  );
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-      if (hasOtherCharacters) {
-        alert("수학 수식만 입력해 주세요");
-        return;
-      }
-      let data = eval(inputVal);
-      setevalResult(data);
+  useEffect(() => {}, []);
+
+  async function onLogin() {
+    /* 회원가입 기능 넣기 */
+    const formData = new FormData();
+    formData.append("username", String(username));
+    formData.append("password", String(password));
+    const response = await fetch(`${API_BASE_URL}/api/user/login`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        Authorization: "",
+      },
+    });
+    let result: any = await response.json(); // 서버 응답을 JSON으로 파싱
+    if (!result?.success) {
+      alert(`로그인 실패. ${result?.msg}`);
+      return;
     }
+
+    let userInfo = result?.data?.userInfo ?? "";
+    let token = result?.data?.token ?? "";
+    if (!userInfo?.id || !token) {
+      alert(`로그인 실패. 서버에서 중요정보 안보냄 ${result?.msg}`);
+      return;
+    }
+    const fullUserInfo = {
+      ...userInfo, // id, username, email 등
+      token: token, // 토큰 추가
+    };
+
+    login(fullUserInfo);
+    navigate("/");
   }
 
   return (
     <div className="content-margin-padding">
       <div>
         <input
-          value={inputVal}
+          value={username}
+          placeholder="username"
           onChange={(event) => {
             let input_value = event?.target?.value ?? "";
             // 숫자와 +, -, *, /, % 만 허용하는 정규식
 
-            setinputVal(input_value);
+            setUsername(input_value);
           }}
-          onKeyDown={onInputEnter}
         />
-        <div> = {evalResult}</div>
-        <div>내가 타이핑 한거: {inputVal}</div>
+        <input
+          value={password}
+          placeholder="password"
+          onChange={(event) => {
+            let input_value = event?.target?.value ?? "";
+            // 숫자와 +, -, *, /, % 만 허용하는 정규식
+
+            setPassword(input_value);
+          }}
+        />
+        <div>
+          <button onClick={onLogin}>로그인</button>
+        </div>
       </div>
     </div>
   );
