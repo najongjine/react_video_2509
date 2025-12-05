@@ -1,9 +1,12 @@
+// Home.tsx (수정된 파일)
 import { useEffect, useState } from "react";
+// 1. ✨ 새로 만든 썸네일 컴포넌트를 import 합니다.
+import VideoThumbnail from "../component/VideoThumbnail";
 
 interface videoListType {
   createdAt?: string;
   id?: number;
-  mp4Url?: string;
+  mp4Url?: string; // 비디오 URL
   publicId?: string;
   title?: string;
 }
@@ -37,10 +40,26 @@ export default function Home() {
         {videos?.length &&
           videos.map((item) => {
             return (
-              <div>
+              <div
+                key={item?.id}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "10px",
+                }}
+              >
+                {/* 2. ✨ VideoThumbnail 컴포넌트를 추가하고 mp4Url을 전달합니다. */}
+                {item?.mp4Url && (
+                  <VideoThumbnail
+                    url={item.mp4Url}
+                    title={item?.title ?? "제목 없음"}
+                  />
+                )}
+
+                {/* 기존 텍스트 정보 */}
                 <span>
-                  {item?.id}, &nbsp;&nbsp; ${item?.title ?? ""}
-                  ,&nbsp;&nbsp; ${item?.createdAt ?? ""}
+                  {item?.id}, &nbsp;&nbsp; {item?.title ?? ""}
+                  ,&nbsp;&nbsp; {item?.createdAt ?? ""}
                 </span>
               </div>
             );
