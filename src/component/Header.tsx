@@ -17,9 +17,6 @@ export default function Header() {
   // 1. 현재 라우트 정보를 가져옵니다.
   const location = useLocation();
 
-  // 2. 현재 경로가 /imgtest 인지 확인합니다.
-  const isImgTestPage = location.pathname === "/imgtest";
-
   return (
     <div>
       <header>
@@ -58,57 +55,12 @@ export default function Header() {
             홈
           </Link>
         </li>
+
         <li>
-          <Link
-            to="/memo_upsert"
-            className={location.pathname === "/memo_upsert" ? "active" : ""}
-          >
-            메모
-          </Link>
-        </li>
-        <li>
-          {/* 현재 페이지가 /imgtest 일 때만 'active' 클래스 추가 */}
-          <Link to="/imgtest" className={isImgTestPage ? "active" : ""}>
-            CNN
-          </Link>
-        </li>
-        <li>
-          {/* 현재 페이지가 /imgtest 일 때만 'active' 클래스 추가 */}
-          <Link
-            to="/facerecog"
-            className={location.pathname === "/facerecog" ? "active" : ""}
-          >
-            얼굴인식
-          </Link>
-        </li>
-        <li>
-          <Link to="/geminirag">Gemini Rag</Link>
-        </li>
-        <li>
-          <Link to="/calc">계산기</Link>
-        </li>
-        <li>
-          <Link to="/lotto">로또</Link>
+          <Link to="/video_upload">비디오업로드</Link>
         </li>
       </ul>
 
-      {/* 3. 현재 경로가 /imgtest일 경우에만 서브 메뉴를 렌더링합니다. */}
-      {isImgTestPage && (
-        <ul className="subnav">
-          <li>
-            {/* 서브 메뉴 링크 (예시: 기본 모델) */}
-            <Link to="/imgtest?model=base">기본 모델</Link>
-          </li>
-          <li>
-            {/* 서브 메뉴 링크 (예시: 파인튜닝 모델) */}
-            <Link to="/imgtest?model=muffin_chihuahua">치와와vs머핀 모델</Link>
-          </li>
-          <li>
-            {/* 서브 메뉴 링크 (예시: 파인튜닝 모델) */}
-            <Link to="/imgtest?model=plantdisease">식물잎사귀 병충해모델</Link>
-          </li>
-        </ul>
-      )}
       {/* 서브 메뉴가 Header.tsx 파일의 반환값에 포함되므로, ImgTest.tsx 파일은 수정할 필요가 없습니다. */}
     </div>
   );
