@@ -22,6 +22,7 @@ const VideoUploaderCompo: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
+  const [title, setTitle] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
@@ -102,6 +103,14 @@ const VideoUploaderCompo: React.FC = () => {
       style={{ padding: "20px", border: "1px solid #ddd", borderRadius: "8px" }}
     >
       <h2>비디오 업로드</h2>
+      <div>
+        <input
+          placeholder="제목"
+          onChange={(e) => {
+            setTitle(e?.target?.value ?? "");
+          }}
+        />
+      </div>
 
       {/* 파일 입력 */}
       <input
