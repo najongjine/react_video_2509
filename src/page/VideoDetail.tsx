@@ -9,6 +9,7 @@ interface videoType {
   mp4Url?: string; // 비디오 URL
   publicId?: string;
   title?: string;
+  encvideo?: any;
 }
 export default function VideoDetail() {
   // 1. 상태 읽기 (READ)
@@ -32,7 +33,9 @@ export default function VideoDetail() {
 
   async function getVideo() {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/video/get_video_list`);
+      const response = await fetch(
+        `${API_BASE_URL}/api/video/get_video_by_id?video_id=${videoId}`
+      );
       const result: any = await response.json();
       if (!result?.success) {
         alert(`서버 에러. ${result?.msg ?? ""}`);
@@ -45,11 +48,23 @@ export default function VideoDetail() {
     }
   }
 
-  useEffect(() => {}, [videoId]);
+  useEffect(() => {
+    getVideo();
+  }, [videoId]);
 
   return (
     <div>
       <div>비디오 상세보기, ${videoId}</div>
+      <div>제목 : ${video?.title}</div>
+      <div>encvideo: {JSON.stringify(video?.encvideo)}</div>
+      <div>
+        <video
+          src={`${API_BASE_URL}/api/video/get_encvideo?encvideo=${JSON.stringify(
+            video?.encvideo
+          )}`}
+          controls={true}
+        />
+      </div>
     </div>
   );
 }
