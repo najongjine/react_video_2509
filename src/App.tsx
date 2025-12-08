@@ -6,6 +6,7 @@ import Footer from "./component/Footer";
 import VideoUpload from "./page/VideoUpload";
 import Register from "./page/Register";
 import Login from "./page/Login";
+import VideoDetail from "./page/VideoDetail";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/video_upload" element={<VideoUpload />} />
+          <Route path="/video_detail" element={<VideoDetail />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>
