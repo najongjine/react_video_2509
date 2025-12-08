@@ -3,6 +3,13 @@ import { useAuthStore } from "../store/authStore";
 import { useShallow } from "zustand/shallow";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
+interface videoType {
+  createdAt?: string;
+  id?: number;
+  mp4Url?: string; // 비디오 URL
+  publicId?: string;
+  title?: string;
+}
 export default function VideoDetail() {
   // 1. 상태 읽기 (READ)
   // useAuthStore 훅을 통해 현재 상태에서 userInfo를 가져옵니다.
@@ -21,6 +28,22 @@ export default function VideoDetail() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const videoId = Number(searchParams?.get("videoId") ?? 0);
+  const [video, setVideo] = useState<videoType>({});
+
+  async function getVideo() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/video/get_video_list`);
+      const result: any = await response.json();
+      if (!result?.success) {
+        alert(`서버 에러. ${result?.msg ?? ""}`);
+        return;
+      }
+      setVideo(result?.data ?? {});
+    } catch (error: any) {
+      alert(`서버 에러. ${error?.message ?? ""}`);
+      return;
+    }
+  }
 
   useEffect(() => {}, [videoId]);
 
