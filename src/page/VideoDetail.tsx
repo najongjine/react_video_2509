@@ -26,7 +26,7 @@ export default function VideoDetail() {
 
   return (
     <div>
-      <div>비디오 상세보기</div>
+      <div>비디오 상세보기, ${videoId}</div>
     </div>
   );
 }
